@@ -1,6 +1,5 @@
 import pygame
-#from pygame import image
-#from pygame.constants import GL_MULTISAMPLEBUFFERS, QUIT
+from pygame.locals import *
 
 pygame.init()
 screen = pygame.display.set_mode((800,600))
@@ -10,6 +9,7 @@ pygame.display.set_caption("Breaking Bricks")
 bat = pygame.image.load('./images/paddle.png')
 bat = bat.convert_alpha()
 bat_rect = bat.get_rect()
+bat_rect[1] = screen.get_height() - 100
 
 #ball image loading
 ball = pygame.image.load('./images/football.png')
@@ -35,16 +35,28 @@ for y in range(brick_rows):
 
 clock = pygame.time.Clock()
 game_over = False
+x = 0
 while not game_over:
     dt = clock.tick(50)
     screen.fill((0,0,0))
 
     for b in bricks:
+        #display all the brick in the screen
         screen.blit(brick, b)
 
+    #Display bat in the scree.
+    screen.blit(bat, bat_rect)
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
+
+    #move the bat with the arrows
+    pressed = pygame.key.get_pressed()    
+    if pressed[K_LEFT]:
+        x += -0.5 * dt
+    if pressed[K_RIGHT]:
+        x += 0.5 * dt    
+    bat_rect[0] = x    
     pygame.display.update()
 
 pygame.quit()
