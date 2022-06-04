@@ -1,3 +1,4 @@
+from pickle import TRUE
 import pygame
 from pygame.locals import *
 
@@ -15,6 +16,12 @@ bat_rect[1] = screen.get_height() - 100
 ball = pygame.image.load('./images/football.png')
 ball = ball.convert_alpha()
 ball_rect = ball.get_rect()
+ball_start = (200, 200)
+ball_speed = (3.0, 3.0)
+ball_served = False
+sx, sy = ball_speed #speed in x and y direction
+ball_rect.topleft = ball_start
+
 
 #brick image loading
 brick = pygame.image.load('./images/brick.png')
@@ -46,6 +53,10 @@ while not game_over:
 
     #Display bat in the scree.
     screen.blit(bat, bat_rect)
+
+    #Display ball in the scree.
+    screen.blit(ball, ball_rect)
+
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -56,7 +67,33 @@ while not game_over:
         x += -0.5 * dt
     if pressed[K_RIGHT]:
         x += 0.5 * dt    
-    bat_rect[0] = x    
+    bat_rect[0] = x 
+    
+    #move the ball if space bar is pressed
+    if pressed[K_SPACE]:
+        ball_served = True
+
+    #ball hit top
+    if ball_rect[1] <= 0:
+        ball_rect[1] = 0
+        sy *= -1
+    #ball hit botton
+    if ball_rect[1] >= screen.get_height() - ball_rect.height:
+        ball_rect[1] = screen.get_height() - ball_rect.height
+        sy *= -1
+    #ball hit left
+    if ball_rect[0] <= 0:
+        ball_rect[0] = 0
+        sx *= -1
+    #ball hit right
+    if ball_rect[0] >= screen.get_width() - ball_rect.width:
+        ball_rect[0] = screen.get_width() - ball_rect.width
+        sx *= -1
+
+    #moving the ball
+    if ball_served:
+        ball_rect[0] += sx    
+        ball_rect[1] += sy    
     pygame.display.update()
 
 pygame.quit()
