@@ -73,14 +73,26 @@ while not game_over:
     if pressed[K_SPACE]:
         ball_served = True
 
+    #ball come back when is hit it by the bat    
+    if bat_rect[0] + bat_rect.width >= ball_rect[0] >= bat_rect[0] and \
+        ball_rect[1] + ball_rect.height >= bat_rect[1] and\
+            sy > 0:
+            sy *= -1
+            sx *= 1.05 #increase the speed of ball in x
+            sy *= 1.05 #increase the speed of ball in y
+            continue
+
     #ball hit top
     if ball_rect[1] <= 0:
         ball_rect[1] = 0
         sy *= -1
     #ball hit botton
     if ball_rect[1] >= screen.get_height() - ball_rect.height:
-        ball_rect[1] = screen.get_height() - ball_rect.height
-        sy *= -1
+        #ball_rect[1] = screen.get_height() - ball_rect.height
+        #sy *= -1
+        ball_served = False
+        ball_rect.topleft = ball_start
+
     #ball hit left
     if ball_rect[0] <= 0:
         ball_rect[0] = 0
