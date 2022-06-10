@@ -82,6 +82,31 @@ while not game_over:
             sy *= 1.05 #increase the speed of ball in y
             continue
 
+    delete_brick = None
+    for b in bricks:
+        bx, by = b
+        if  bx <= ball_rect[0] <= bx + brick_rect.width and\
+            by <= ball_rect[1] <= by + brick_rect.height:
+            delete_brick = b
+
+            #change the direction of the ball when hit a brick
+            if ball_rect[0] <= bx + 2:
+                sx *= -1
+            elif ball_rect[0] >= bx +brick_rect.width - 2:
+                sx *= -1
+            
+            if ball_rect[1] <= by + 2:
+                sy *= -1
+            elif ball_rect[1] >= by + brick_rect.height -2:
+                sy *= -1
+            break
+        
+
+    
+    if delete_brick is not None:
+        bricks.remove(delete_brick)
+           
+
     #ball hit top
     if ball_rect[1] <= 0:
         ball_rect[1] = 0
